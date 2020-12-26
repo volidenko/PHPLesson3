@@ -16,14 +16,12 @@
     <form action="registration.php" method="POST">
         <div class="form-group"><label for='login'>Login:</label>
             <input type='text' name='login' class="form-control" placeholder="Enter login" /></div>
-
         <div class="form-group"><label for='email'>Email:</label>
             <input type='email' name='email' class="form-control" placeholder="Enter email" /></div>
-
         <div class="form-group"><label for='passw'>Password:</label>
             <input type='password' name='passw' class="form-control" placeholder="Enter password" /></div>
-
         <input type='submit' name='accept' value='Login' class="btn btn-primary" />
+        <input type='submit' name='listUser' value='Список пользователей' class="btn btn-primary" />
     </form>
     <?
     }
@@ -35,27 +33,24 @@
             $line=fgets($fd);
             $readname=substr($line,0,strpos($line, ":"));
         }
-        $line= "Login: ". $_POST["login"] . "; Email: " .$_POST["email"]. "; Password: ".$_POST["passw"]."\r\n";
+        $line=$_POST["login"].":".md5($_POST["passw"]).":".$_POST["email"]."\r\n";
         fputs($fd,$line);
         fclose($fd);
         echo "<h3><span style='color:green'>Пользователь добавлен!</span></h3>";
     }
 
-    //     $str=file_get_contents("user.txt");
-    //     $pos=strstr($str, $_POST["login"]);
-    //     if ($pos===false) {
-    //         $userdata = "Login: ". $_POST["login"] . "; Email: " .$_POST["email"]. "; Password: ".$_POST["passw"] ."\n";
-    //         $file=fopen("user.txt", "a+");
-    //         fwrite($file, $userdata);
-    //         fclose($file);
-    //     }
-    // }
+    if(isset($_POST["listUser"])){
+        echo "</br><h3><span style='color:orange'>Список пользователей</span></h3>";
+        $fd = fopen("users.txt", "r") or die("Невозможно открыть файл");
+        while(!feof($fd))
+        {
+            $line=fgets($fd);
+            $readname=substr($line,0,strpos($line, ":"));
+            echo $readname."</br>";
+        }
+        fclose($fd);
+    }
 ?>
 </body>
 
 </html>
-
-
-<!-- $title="Новости";
-echo "<h2 style='color: ".$color="blue"."'>".$title."</h2>";
-echo "<a href='home.php'> На главную </a>"; -->
